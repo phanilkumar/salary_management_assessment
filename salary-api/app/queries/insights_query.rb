@@ -1,4 +1,17 @@
 class InsightsQuery
+  COUNTRY_CURRENCY = {
+    "USA"       => "USD",
+    "India"     => "INR",
+    "UK"        => "GBP",
+    "Canada"    => "CAD",
+    "Australia" => "AUD",
+    "Germany"   => "EUR",
+    "France"    => "EUR",
+    "Singapore" => "SGD",
+    "Japan"     => "JPY",
+    "Brazil"    => "BRL"
+  }.freeze
+
   SALARY_BANDS = [
     { label: "Below $50k", min: 0, max: 50_000 },
     { label: "$50k - $100k", min: 50_000, max: 100_000 },
@@ -20,6 +33,7 @@ class InsightsQuery
       .map do |row|
         {
           country: row.country,
+          currency: COUNTRY_CURRENCY[row.country] || "USD",
           headcount: row.headcount,
           min_salary: row.min_salary.to_f,
           max_salary: row.max_salary.to_f,
@@ -44,6 +58,7 @@ class InsightsQuery
     {
       country: country,
       job_title: job_title,
+      currency: COUNTRY_CURRENCY[country] || "USD",
       headcount: result["headcount"].to_i,
       min_salary: result["min_salary"].to_f,
       max_salary: result["max_salary"].to_f,

@@ -12,16 +12,23 @@ const COUNTRY_COLORS = [
   "#ec4899", "#14b8a6",
 ];
 
-const fmt = (n) =>
-  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
+const COUNTRY_CURRENCY = {
+  USA: "USD", India: "INR", UK: "GBP", Canada: "CAD",
+  Australia: "AUD", Germany: "EUR", France: "EUR",
+  Singapore: "SGD", Japan: "JPY", Brazil: "BRL",
+};
+
+const fmt = (n, currency = "USD") =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 0 }).format(n);
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
+  const currency = COUNTRY_CURRENCY[label] || "USD";
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow p-3 text-xs">
       <p className="font-semibold text-gray-800 mb-1">{label}</p>
       <p style={{ color: payload[0].fill }}>
-        Avg Salary: {fmt(payload[0].value)}
+        Avg Salary: {fmt(payload[0].value, currency)}
       </p>
     </div>
   );
@@ -99,9 +106,9 @@ export default function CountryInsights() {
         {selectedData && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <StatCard label="Employees" value={selectedData.headcount.toLocaleString()} color="blue" />
-            <StatCard label="Avg Salary" value={fmt(selectedData.avg_salary)} color="green" />
-            <StatCard label="Max Salary" value={fmt(selectedData.max_salary)} color="purple" />
-            <StatCard label="Min Salary" value={fmt(selectedData.min_salary)} color="orange" />
+            <StatCard label="Avg Salary" value={fmt(selectedData.avg_salary, selectedData.currency)} color="green" />
+            <StatCard label="Max Salary" value={fmt(selectedData.max_salary, selectedData.currency)} color="purple" />
+            <StatCard label="Min Salary" value={fmt(selectedData.min_salary, selectedData.currency)} color="orange" />
           </div>
         )}
       </div>

@@ -15,7 +15,18 @@ DEPARTMENTS = [
 ].freeze
 
 EMPLOYMENT_TYPES = %w[full_time part_time contract].freeze
-CURRENCIES       = %w[USD EUR GBP INR AUD CAD SGD].freeze
+COUNTRY_CURRENCY = {
+  "USA"       => "USD",
+  "India"     => "INR",
+  "UK"        => "GBP",
+  "Canada"    => "CAD",
+  "Australia" => "AUD",
+  "Germany"   => "EUR",
+  "France"    => "EUR",
+  "Singapore" => "SGD",
+  "Japan"     => "JPY",
+  "Brazil"    => "BRL"
+}.freeze
 
 # Salary ranges keyed by department (min, max)
 SALARY_RANGES = {
@@ -65,10 +76,13 @@ JOB_TITLES = {
   ]
 }.freeze
 
-if Employee.count > 0
-  puts "Already seeded #{Employee.count} employees, skipping."
+if Employee.count > 0 && Employee.where.not(currency: %w[USD INR GBP CAD AUD EUR SGD JPY BRL]).count == 0
+  puts "Already seeded #{Employee.count} employees with correct currencies, skipping."
   return
 end
+
+puts "Re-seeding with correct country currencies..."
+Employee.delete_all
 
 puts "Seeding #{SEED_COUNT} employees..."
 
@@ -96,7 +110,7 @@ time = Benchmark.realtime do
         email:           "#{first_name.downcase}.#{last_name.downcase}.#{index}@company.com",
         hire_date:       Date.today - rand(0..3650),
         salary:          salary,
-        currency:        CURRENCIES.sample,
+        currency:        COUNTRY_CURRENCY[country],
         created_at:      now,
         updated_at:      now
       }

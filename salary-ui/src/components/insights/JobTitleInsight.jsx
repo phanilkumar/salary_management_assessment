@@ -8,8 +8,8 @@ const COUNTRIES = [
   "India", "Japan", "Singapore", "UK", "USA",
 ];
 
-const fmt = (n) =>
-  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
+const fmt = (n, currency = "USD") =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 0 }).format(n);
 
 export default function JobTitleInsight() {
   const [country, setCountry]   = useState("");
@@ -76,9 +76,9 @@ export default function JobTitleInsight() {
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <StatCard label="Headcount"   value={data.headcount.toLocaleString()} color="blue" />
-            <StatCard label="Avg Salary"  value={fmt(data.avg_salary)}  color="green" />
-            <StatCard label="Max Salary"  value={fmt(data.max_salary)}  color="purple" />
-            <StatCard label="Min Salary"  value={fmt(data.min_salary)}  color="orange" />
+            <StatCard label="Avg Salary"  value={fmt(data.avg_salary, data.currency)}  color="green" />
+            <StatCard label="Max Salary"  value={fmt(data.max_salary, data.currency)}  color="purple" />
+            <StatCard label="Min Salary"  value={fmt(data.min_salary, data.currency)}  color="orange" />
           </div>
         </div>
       )}
