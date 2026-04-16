@@ -15,6 +15,7 @@ test:
   database: salary_management_test
 
 production:
-  <<: *default
-  database: salary_management_production
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   url: <%= ENV["DATABASE_URL"] %>
