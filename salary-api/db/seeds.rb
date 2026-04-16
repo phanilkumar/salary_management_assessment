@@ -65,12 +65,15 @@ JOB_TITLES = {
   ]
 }.freeze
 
+if Employee.count > 0
+  puts "Already seeded #{Employee.count} employees, skipping."
+  return
+end
+
 puts "Seeding #{SEED_COUNT} employees..."
 
 first_names = File.readlines(File.join(DB_DIR, "first_names.txt")).map(&:chomp).reject(&:empty?)
 last_names  = File.readlines(File.join(DB_DIR, "last_names.txt")).map(&:chomp).reject(&:empty?)
-
-Employee.delete_all
 
 time = Benchmark.realtime do
   (SEED_COUNT / BATCH_SIZE).times do |batch_index|
