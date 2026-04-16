@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      # Routes will be added in later phases
+      resources :employees, only: [ :index, :show, :create, :update, :destroy ]
     end
   end
 end
