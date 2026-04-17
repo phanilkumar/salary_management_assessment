@@ -99,6 +99,14 @@ class InsightsQuery
       end
   end
 
+  def self.job_titles_by_country(country)
+    Employee
+      .where(country: country)
+      .distinct
+      .order(:job_title)
+      .pluck(:job_title)
+  end
+
   def self.by_job_title_in_country(country, job_title)
     result = ActiveRecord::Base.connection.select_one(
       Employee.sanitize_sql_array([<<~SQL, country, job_title])

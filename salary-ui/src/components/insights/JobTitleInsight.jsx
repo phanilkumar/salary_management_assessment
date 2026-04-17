@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useByJobTitle } from "../../hooks/useInsights";
+import { useByJobTitle, useJobTitlesByCountry } from "../../hooks/useInsights";
 import StatCard from "../ui/StatCard";
 import SectionHeader from "../ui/SectionHeader";
 
@@ -16,10 +16,17 @@ export default function JobTitleInsight() {
   const [jobTitle, setJobTitle] = useState("");
   const [submitted, setSubmitted] = useState({ country: "", jobTitle: "" });
 
+  const { data: jobTitles, isLoading: titlesLoading } = useJobTitlesByCountry(country);
+
   const { data, isLoading, isError } = useByJobTitle(
     submitted.country,
     submitted.jobTitle
   );
+
+  const handleCountryChange = (e) => {
+    setCountry(e.target.value);
+    setJobTitle("");
+  };
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -35,21 +42,25 @@ export default function JobTitleInsight() {
       <form onSubmit={handleSearch} className="flex flex-wrap gap-3 mb-6">
         <select
           value={country}
-          onChange={(e) => setCountry(e.target.value)}
+          onChange={handleCountryChange}
           className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         >
           <option value="">Select country…</option>
           {COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
-        <input
-          type="text"
+        <select
           value={jobTitle}
           onChange={(e) => setJobTitle(e.target.value)}
-          placeholder="e.g. Software Engineer"
-          className="border border-gray-300 rounded-lg px-3 py-2 text-sm w-56 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
-        />
+          disabled={!country || titlesLoading}
+        >
+          <option value="">
+            {!country ? "Select country first…" : titlesLoading ? "Loading…" : "Select job title…"}
+          </option>
+          {jobTitles?.map((t) => <option key={t} value={t}>{t}</option>)}
+        </select>
         <button
           type="submit"
           className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 font-medium"

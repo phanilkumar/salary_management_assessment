@@ -9,5 +9,7 @@ export const fetchTopJobTitles      = async (limit = 10) =>
   (await api.get("/insights/top_paying_job_titles", { params: { limit } })).data.data;
 export const fetchSalaryBands       = async (country = null) =>
   (await api.get("/insights/salary_bands", { params: country ? { country } : {} })).data.data;
+export const fetchJobTitlesByCountry = async (country) =>
+  (await api.get("/insights/job_titles_by_country", { params: { country } })).data.data;
 export const fetchByJobTitle        = async ({ country, job_title }) =>
   (await api.get("/insights/by_job_title", { params: { country, job_title } })).data.data;

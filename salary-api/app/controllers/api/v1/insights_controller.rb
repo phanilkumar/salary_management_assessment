@@ -12,6 +12,14 @@ module Api
         render json: { data: InsightsQuery.by_country }
       end
 
+      # GET /api/v1/insights/job_titles_by_country?country=India
+      def job_titles_by_country
+        country = params.require(:country)
+        render json: { data: InsightsQuery.job_titles_by_country(country) }
+      rescue ActionController::ParameterMissing => e
+        render json: { error: e.message }, status: :bad_request
+      end
+
       # GET /api/v1/insights/by_job_title?country=India&job_title=Engineer
       def by_job_title
         country = params.require(:country)

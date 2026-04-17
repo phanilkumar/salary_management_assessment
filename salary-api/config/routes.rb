@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       namespace :insights do
         get :overview
         get :by_country
+        get :job_titles_by_country
         get :by_job_title
         get :by_department
         get :by_employment_type
