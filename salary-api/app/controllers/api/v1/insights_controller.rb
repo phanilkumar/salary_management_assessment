@@ -1,9 +1,10 @@
 module Api
   module V1
     class InsightsController < BaseController
-      # GET /api/v1/insights/overview
+      # GET /api/v1/insights/overview?country=India
       def overview
-        render json: { data: InsightsQuery.overview }
+        country = params[:country].presence
+        render json: { data: InsightsQuery.overview(country: country) }
       end
 
       # GET /api/v1/insights/by_country
@@ -36,9 +37,10 @@ module Api
         render json: { data: InsightsQuery.top_paying_job_titles(limit: limit) }
       end
 
-      # GET /api/v1/insights/salary_bands
+      # GET /api/v1/insights/salary_bands?country=India
       def salary_bands
-        render json: { data: InsightsQuery.salary_band_distribution }
+        country = params[:country].presence
+        render json: { data: InsightsQuery.salary_band_distribution(country: country) }
       end
     end
   end

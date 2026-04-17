@@ -1,8 +1,8 @@
 import { useTopJobTitles } from "../../hooks/useInsights";
 import SectionHeader from "../ui/SectionHeader";
 
-const fmt = (n) =>
-  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
+const fmt = (n, currency = "USD") =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 0 }).format(n);
 
 export default function TopJobTitlesTable() {
   const { data, isLoading } = useTopJobTitles(10);
@@ -31,7 +31,7 @@ export default function TopJobTitlesTable() {
               <tr key={row.job_title} className="hover:bg-gray-50 transition-colors">
                 <td className="px-4 py-3 text-gray-400 font-medium">{i + 1}</td>
                 <td className="px-4 py-3 font-medium text-gray-800">{row.job_title}</td>
-                <td className="px-4 py-3 text-right font-semibold text-green-700">{fmt(row.avg_salary)}</td>
+                <td className="px-4 py-3 text-right font-semibold text-green-700">{fmt(row.avg_salary, row.currency)}</td>
                 <td className="px-4 py-3 text-right text-gray-500">{row.headcount.toLocaleString()}</td>
               </tr>
             ))}

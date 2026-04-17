@@ -9,12 +9,12 @@ import {
   fetchByJobTitle,
 } from "../api/insights";
 
-export const useOverview         = () => useQuery({ queryKey: ["insights", "overview"],         queryFn: fetchOverview });
+export const useOverview         = (country = null) => useQuery({ queryKey: ["insights", "overview", country],         queryFn: () => fetchOverview(country) });
 export const useByCountry        = () => useQuery({ queryKey: ["insights", "by_country"],        queryFn: fetchByCountry });
 export const useByDepartment     = () => useQuery({ queryKey: ["insights", "by_department"],     queryFn: fetchByDepartment });
 export const useByEmploymentType = () => useQuery({ queryKey: ["insights", "by_employment_type"], queryFn: fetchByEmploymentType });
 export const useTopJobTitles     = (limit) => useQuery({ queryKey: ["insights", "top_job_titles", limit], queryFn: () => fetchTopJobTitles(limit) });
-export const useSalaryBands      = () => useQuery({ queryKey: ["insights", "salary_bands"],      queryFn: fetchSalaryBands });
+export const useSalaryBands      = (country = null) => useQuery({ queryKey: ["insights", "salary_bands", country],      queryFn: () => fetchSalaryBands(country) });
 export const useByJobTitle       = (country, jobTitle) =>
   useQuery({
     queryKey: ["insights", "by_job_title", country, jobTitle],

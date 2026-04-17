@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell, ResponsiveContainer,
 } from "recharts";
@@ -5,6 +6,11 @@ import { useSalaryBands } from "../../hooks/useInsights";
 import SectionHeader from "../ui/SectionHeader";
 
 const COLORS = ["#6366f1", "#3b82f6", "#10b981", "#f59e0b"];
+
+const COUNTRIES = [
+  "Australia", "Brazil", "Canada", "France", "Germany",
+  "India", "Japan", "Singapore", "UK", "USA",
+];
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
@@ -17,17 +23,30 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function SalaryBandChart() {
-  const { data, isLoading } = useSalaryBands();
+  const [country, setCountry] = useState(null);
+  const { data, isLoading } = useSalaryBands(country);
 
   if (isLoading) return <p className="text-sm text-gray-400">Loading salary bands…</p>;
   if (!data?.length) return null;
 
   return (
     <div>
-      <SectionHeader
-        title="Salary Band Distribution"
-        subtitle="Number of employees in each salary range"
-      />
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <SectionHeader
+          title="Salary Band Distribution"
+          subtitle="Number of employees in each salary range"
+        />
+        <select
+          value={country ?? ""}
+          onChange={(e) => setCountry(e.target.value || null)}
+          className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">All Countries (USD)</option>
+          {COUNTRIES.map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
+      </div>
       <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
         <ResponsiveContainer width="100%" height={240}>
           <BarChart data={data} margin={{ top: 4, right: 16, left: 16, bottom: 4 }}>
